@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/aclonica</item>
+        <item>@font/archivo</item>
+        <item>@font/audiowide</item>
+        <item>@font/calligraffitti</item>
+        <item>@font/carter_one</item>
+        <item>@font/comfortaa_bold</item>
+        <item>@font/concert_one</item>
+        <item>@font/train_one</item>
+    </array>
+</resources>

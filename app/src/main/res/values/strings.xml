@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">HL_ENTREGA</string>
+    <string name="login">Login</string>
+    <string name="full_name">Full name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="conf_password">Conf password</string>
+    <string name="register">REGISTER</string>
+    <string name="welcome_to_your_help_services">Welcome to your Help Services</string>
+    <string name="welcome">Welcome</string>
+    <string name="go">GO</string>
+    <string name="hl_entrega">HL_ENTREGA</string>
+    <string name="contact_us_for_920_403_997_962_618_278">Contact us for : 920 403 997 / 962 618 278</string>
+    <string name="email_hl_entrega_tomar_pt">Email : hl.entrega@tomar.pt</string>
+    <string name="submit" />
+    <string name="required" />
+    <string name="phone_number" />
+    <string name="backTologin"><![CDATA[<<Back]]></string>
+</resources>

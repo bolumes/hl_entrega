@@ -1,10 +1,10 @@
 package com.example.hl_entrega
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hl_entrega.databinding.ActivityRegisterBinding
 
@@ -12,6 +12,7 @@ import com.example.hl_entrega.databinding.ActivityRegisterBinding
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
+    private lateinit var db: UserDatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,18 +24,26 @@ class RegisterActivity : AppCompatActivity() {
         emailFocusListener()
         passwordFocusListener()
 
-        binding.backlogin.setOnClickListener{
-            navegateToLogin()
+        //CHAMANDO A FUNÇAO NAVEGAR TO LOGIN
+        binding.backLogin.setOnClickListener{
+            navigateToLogin()
         }
 
+        //INICIALISAR BD
+        val db = UserDatabaseHelper(this)
+
+        //CHAMANDO A FUNÇAO SUBMIT PARA VALIDAR OS CAMPOS
         binding.submitButton.setOnClickListener{
-            submitBtn(user)
+            submitBtn()
+            //RegisterActivity()
         }
 
     }
 
-    //SUBMIT
-    private fun submitBtn(user: User){
+
+
+    //
+    private fun submitBtn(){
 
         binding.fullnameet.helperText = validFullname()
         binding.phonenumberet.helperText = validPhonenumberet()
@@ -46,23 +55,28 @@ class RegisterActivity : AppCompatActivity() {
         val validEmail = binding.emailet.helperText == null
         val validPassword = binding.password.helperText == null
 
+            //Initialized db
+            db = UserDatabaseHelper(this)
 
-        if (validfullname && validPhonenumber && validEmail && validPassword){
+            if (validfullname && validPhonenumber && validEmail && validPassword){
 
-            val db = UserDatabaseHelper(this)
-            val fullname = binding.fullnameet.editText.toString()
-            val phonenumber = binding.phonenumberet.editText.toString()
-            val email = binding.emailet.editText.toString()
-            val password = binding.password.editText.toString()
-            db.InsertionUser(user)
-            finish()
-            Toast.makeText(this, "User saved sucessfully", Toast.LENGTH_SHORT).show()
 
-            // RESET DE BUTTON BEFORE SAVIND DE INFO
-            resetBtn()
-        }else{
-            invalidBtn()
-        }
+                val fullName = binding.fullnameet.editText?.text?.toString() ?: ""
+                val phoneNumber = binding.phonenumberet.editText?.text?.toString()?.toIntOrNull()
+                val email = binding.emailet.editText?.text?.toString() ?: ""
+                val password = binding.password.editText?.text?.toString() ?: ""
+                val user = User(0, fullName, phoneNumber ?: 0, email, password)
+
+                db.InsertionUser(user)
+                finish()
+                Toast.makeText(this, "User saved sucessfully", Toast.LENGTH_SHORT).show()
+
+                // RESET DE BUTTON BEFORE SAVIND DE INFO
+                resetBtn()
+            }else{
+                invalidBtn()
+            }
+
     }
 
     //RESET
@@ -241,11 +255,21 @@ class RegisterActivity : AppCompatActivity() {
         return null
     }
 
-    fun navegateToLogin(): String? {
-        val navegarLogin = Intent(this, LoginActivity::class.java)
-        val resul = startActivity(navegarLogin)
+
+
+   fun navigateToLogin() {
+        val navigateToLoginIntent = Intent(this, LoginActivity::class.java)
+        startActivity(navigateToLoginIntent)
+    }
+
+    private fun navegateToRegister(): String? {
+        val navegarRegister = Intent(this, RegisterActivity::class.java)
+        val resul = startActivity(navegarRegister)
         return null
     }
+
+
+
 
 
 }

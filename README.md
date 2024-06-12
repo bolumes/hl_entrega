@@ -2,7 +2,7 @@ HL_ENTREGA
 O HL_ENTREGA é um aplicativo criado para atuar como intermediário entre usuários e restaurantes, oferecendo uma plataforma eficiente para pedidos de comida. O nome é uma homenagem aos criadores, Luis e Hamilton.
 
 Estrutura do Aplicativo
-O HL_ENTREGA é construído sobre uma base de dados chamada entrega.db, que contém cinco tabelas principais:
+O HL_ENTREGA é construído sobre uma base de dados SQLite chamada entrega.db, que contém cinco tabelas principais:
 
 Usuário
 Campos: id, nome_completo, telefone, email, endereço, senha

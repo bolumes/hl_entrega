@@ -1,4 +1,4 @@
-package com.example.hl_entrega
+package com.example.hl_entrega.UI
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hl_entrega.Models.Admin
+import com.example.hl_entrega.R
 import com.example.hl_entrega.databinding.ActivityAdminRegisterBinding
 
 class AdminRegisterActivity : AppCompatActivity() {
@@ -43,8 +44,9 @@ class AdminRegisterActivity : AppCompatActivity() {
     }
 
 
-
-    //
+    /**
+     * function to save admin
+     */
     private fun submitBtn(){
 
         binding.fullnameet.helperText = validFullname()
@@ -70,7 +72,8 @@ class AdminRegisterActivity : AppCompatActivity() {
             val email = binding.emailet.editText?.text?.toString() ?: ""
             val password = binding.password.editText?.text?.toString() ?: ""
             val address = binding.addresset.editText?.text?.toString() ?: ""
-            val admin = Admin(1, fullName, phoneNumber, email, password, address)
+            val type = binding.type.editText?.text?.toString() ?: ""
+            val admin = Admin(1, fullName, phoneNumber, email, password, address, type)
 
             db.insertAdmin(admin)
             finish()
@@ -84,7 +87,9 @@ class AdminRegisterActivity : AppCompatActivity() {
 
     }
 
-    //RESET
+    /**
+     * function to reset filds
+     */
     private fun resetBtn() {
         var message = "Fullneme: " + binding.fullnameet.editText
         message += "Phonenumber: " + binding.phonenumberet.editText
@@ -113,7 +118,11 @@ class AdminRegisterActivity : AppCompatActivity() {
 
 
     }
-    // INVALID
+
+    /**
+     * function to see if the filds are asigned
+     */
+
     private fun invalidBtn() {
         var message = ""
         if (binding.fullnameet.helperText != null)

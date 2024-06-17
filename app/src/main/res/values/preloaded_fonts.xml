@@ -2,8 +2,12 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
         <item>@font/aclonica</item>
+        <item>@font/allan</item>
+        <item>@font/allura</item>
         <item>@font/archivo</item>
         <item>@font/audiowide</item>
+        <item>@font/bad_script</item>
+        <item>@font/black_ops_one</item>
         <item>@font/calligraffitti</item>
         <item>@font/carter_one</item>
         <item>@font/comfortaa_bold</item>

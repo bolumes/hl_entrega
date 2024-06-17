@@ -1,5 +1,7 @@
-package com.example.hl_entrega
+package com.example.hl_entrega.UI
 
+
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -15,24 +17,28 @@ class MenuUserActivity : AppCompatActivity() {
         binding = ActivityMenuUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        /*
-        val userId = intent.getIntExtra("USER_ID", -1) // -1 é o valor padrão se o ID não for encontrado
-        if (userId != -1) {
-            // Use o ID do usuário como necessário
-            Toast.makeText(this, "User ID: $userId", Toast.LENGTH_SHORT).show()
-        }
+        // Recupera o email da Intent ou das SharedPreferences
+        val email = intent.getStringExtra("email") ?: getEmailFromPreferences()
 
-         */
+        // Se email não for nulo, salva nas SharedPreferences
+        email?.let { saveEmailToPreferences(it) }
+
+        // Vincula o TextView do layout
+        val emailTextView = binding.tvUserEmail
+
+        // Define o texto do TextView com o email
+        emailTextView.text = email
 
         binding.logOut.setOnClickListener {
             showLogoutConfirmationDialog()
         }
 
-        binding.clickPedido.setOnClickListener {
-            navigateToPedidoCliente()
+        binding.clickAbout.setOnClickListener {
+            navigateToAboutUs()
         }
 
-        //var clickCamera = binding.clickCamera
+
+
         binding.clickCamera.setOnClickListener {
             navigateToCamera()
         }
@@ -40,11 +46,12 @@ class MenuUserActivity : AppCompatActivity() {
         binding.clickSeeMenu.setOnClickListener{
             navigateToSeeMenu()
         }
-
-
     }
 
 
+    /**
+     * Function to logout or to stay
+     */
     private fun showLogoutConfirmationDialog() {
         val dialog = AlertDialog.Builder(this)
             .setTitle("Do you really want to logout?")
@@ -58,8 +65,12 @@ class MenuUserActivity : AppCompatActivity() {
         dialog.show()
     }
 
+
+    /**
+     * Function to confirm that you logout well
+     */
     private fun logout() {
-        // Add logout logic here if needed
+        clearEmailFromPreferences() // Limpa o email das SharedPreferences ao fazer logout
         Toast.makeText(this, "Você saiu com sucesso", Toast.LENGTH_SHORT).show()
         navigateToLogin()
     }
@@ -69,16 +80,14 @@ class MenuUserActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun navigateToPedidoCliente() {
-        val intent = Intent(this, CommandActivity::class.java)
+    private fun navigateToAboutUs() {
+        val intent = Intent(this, AboutUsActivity::class.java)
         startActivity(intent)
     }
-
     private fun navigateToCamera() {
         val intent = Intent(this, UsergetCamera::class.java)
         startActivity(intent)
     }
-
 
     private fun navigateToSeeMenu() {
         val intent = Intent(this, SeeMenuUser::class.java)
@@ -86,6 +95,35 @@ class MenuUserActivity : AppCompatActivity() {
     }
 
 
+    /**
+     * Função para salvar o email nas SharedPreferences
+     */
+    private fun saveEmailToPreferences(email: String) {
+        val sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString("email", email)
+            apply()
+        }
+    }
+
+
+    /**
+     * Função para recuperar o email das SharedPreferences
+     */
+    private fun getEmailFromPreferences(): String? {
+        val sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        return sharedPref.getString("email", null)
+    }
+
+    /**
+     * Função para limpar o email das SharedPreferences ao fazer logout
+      */
+
+    private fun clearEmailFromPreferences() {
+        val sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            remove("email")
+            apply()
+        }
+    }
 }
-
-

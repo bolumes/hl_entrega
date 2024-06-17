@@ -1,4 +1,4 @@
-package com.example.hl_entrega
+package com.example.hl_entrega.UI
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hl_entrega.Models.Menu
+import com.example.hl_entrega.R
 
-class SeeMenuAdapter(private val menus: List<Menu>) : RecyclerView.Adapter<SeeMenuAdapter.MenuViewHolder>() {
+class SeeMenuAdapter(private val menu: Menu) : RecyclerView.Adapter<SeeMenuAdapter.MenuViewHolder>() {
 
     class MenuViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val menuData: TextView = itemView.findViewById(R.id.tvMenuData)
@@ -20,14 +21,12 @@ class SeeMenuAdapter(private val menus: List<Menu>) : RecyclerView.Adapter<SeeMe
     }
 
     override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
-        // Sempre pegue o último item da lista
-        val menu = menus.last()
         holder.menuData.text = menu.dataM
         holder.menuDescription.text = menu.descriptionM
     }
 
     override fun getItemCount(): Int {
-        // Retorne 1 para exibir apenas um item
+        // Exibir apenas um item
         return 1
     }
 }

@@ -1,4 +1,4 @@
-package com.example.hl_entrega.classes
+package com.example.hl_entrega.Models
 
 data class Menu(
         var idM: Int,

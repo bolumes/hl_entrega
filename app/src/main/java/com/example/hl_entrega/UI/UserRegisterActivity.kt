@@ -1,4 +1,4 @@
-package com.example.hl_entrega
+package com.example.hl_entrega.UI
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hl_entrega.Models.User
+import com.example.hl_entrega.R
 import com.example.hl_entrega.databinding.ActivityRegisterBinding
 
 
@@ -48,8 +49,9 @@ class UserRegisterActivity : AppCompatActivity() {
     }
 
 
-
-    //
+    /**
+     * Function to insert user in the database
+     */
     private fun submitBtn(){
 
         binding.fullnameet.helperText = validFullname()
@@ -75,7 +77,8 @@ class UserRegisterActivity : AppCompatActivity() {
             val email = binding.emailet.editText?.text?.toString() ?: ""
             val password = binding.password.editText?.text?.toString() ?: ""
             val address = binding.address.editText?.text?.toString() ?: ""
-            val user = User(0, fullName, phoneNumber, email, password, address)
+            val type = binding.type.editText?.text?.toString() ?: ""
+            val user = User(0, fullName, phoneNumber, email, password, address, type)
 
             db.insertUser(user)
             finish()
@@ -89,7 +92,9 @@ class UserRegisterActivity : AppCompatActivity() {
 
     }
 
-    //RESET
+    /**
+     * Function to reset
+     */
     private fun resetBtn() {
         var message = "Fullneme: " + binding.fullnameet.editText
         message += "Phonenumber: " + binding.phonenumberet.editText
@@ -118,6 +123,7 @@ class UserRegisterActivity : AppCompatActivity() {
 
 
     }
+
     // INVALID
     private fun invalidBtn() {
         var message = ""

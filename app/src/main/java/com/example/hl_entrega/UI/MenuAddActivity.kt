@@ -1,4 +1,4 @@
-package com.example.hl_entrega
+package com.example.hl_entrega.UI
 
 import android.content.Intent
 import android.os.Bundle
@@ -61,6 +61,10 @@ class MenuAddActivity : AppCompatActivity() {
         startActivity(navigateToMainIntent)
     }
 
+
+    /**
+     * function to saved or to insert the menu
+     */
     private fun submitBtn() {
         val dataSystem = binding.dataSystem.text.toString().trim() // Obtem a data do campo
         val description = binding.descriptionMenu.text.toString().trim()
@@ -75,7 +79,10 @@ class MenuAddActivity : AppCompatActivity() {
         Toast.makeText(this, "Menu saved successfully", Toast.LENGTH_SHORT).show()
     }
 
-    // Método para obter a data atual do sistema
+
+    /**
+     * Function to get a system data
+     */
     private fun getCurrentDate(): String {
         val calendar = Calendar.getInstance()
         val currentDate = calendar.time

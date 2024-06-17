@@ -1,4 +1,4 @@
-package com.example.hl_entrega
+package com.example.hl_entrega.UI
 
 import android.content.Intent
 import android.location.Geocoder
@@ -54,6 +54,9 @@ class GpsLocationActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * function to get location of user using the his address
+     */
     private fun fetchLocationFromAddress(address: String) {
         try {
             // Geocoding to get the location coordinates
@@ -72,6 +75,10 @@ class GpsLocationActivity : AppCompatActivity() {
         }
     }
 
+
+    /**
+     * function to open the google maps
+     */
     private fun openGoogleMaps(latitude: Double, longitude: Double) {
         val uri = "geo:$latitude,$longitude?q=$latitude,$longitude(Portugal)"
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))

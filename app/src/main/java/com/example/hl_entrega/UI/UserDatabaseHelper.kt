@@ -1,4 +1,4 @@
-package com.example.hl_entrega
+package com.example.hl_entrega.UI
 
 import android.content.ContentValues
 import android.content.Context
@@ -10,6 +10,12 @@ import com.example.hl_entrega.Models.Command
 import com.example.hl_entrega.Models.Menu
 import com.example.hl_entrega.Models.Restaurant
 import com.example.hl_entrega.Models.User
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URL
 
 class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -25,6 +31,8 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         private const val COLUMN_USER_EMAIL = "email"
         private const val COLUMN_USER_PASSWORD = "password"
         private const val COLUMN_USER_ADDRESS = "address"
+        private const val COLUMN_USER_TYPE = "type"
+        private const val API_URL = "http://localhost:3000/api/usuarios" // Substitua pelo seu URL de API
 
         // TABELA DE RESTAURANTES
         private const val TABLE_RESTAURANTS = "allRestaurants"
@@ -42,6 +50,7 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         private const val COLUMN_ADMIN_EMAIL = "email"
         private const val COLUMN_ADMIN_PASSWORD = "password"
         private const val COLUMN_ADMIN_ADDRESS = "address"
+        private const val COLUMN_ADMIN_TYPE = "type"
 
         // TABELA DE MENU
         private const val TABLE_MENUS = "allMenu"
@@ -54,6 +63,7 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         private const val COLUMN_COMMANDS_ID = "idC"
         private const val COLUMN_COMMANDS_DATA = "dataC"
         private const val COLUMN_COMMANDS_DESCRIPTION = "descriptionC"
+        private const val COLUMN_COMMANDS_COMMANDER = "commanderC"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -63,7 +73,8 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             CREATE TABLE $TABLE_COMMANDS (
                 $COLUMN_COMMANDS_ID INTEGER PRIMARY KEY AUTOINCREMENT, 
                 $COLUMN_COMMANDS_DATA TEXT, 
-                $COLUMN_COMMANDS_DESCRIPTION TEXT
+                $COLUMN_COMMANDS_DESCRIPTION TEXT,
+                $COLUMN_COMMANDS_COMMANDER TEXT
             )
         """.trimIndent()
         db?.execSQL(createCommandTableQuery)
@@ -89,7 +100,8 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
                 $COLUMN_ADMIN_PHONENUMBER TEXT, 
                 $COLUMN_ADMIN_EMAIL TEXT, 
                 $COLUMN_ADMIN_PASSWORD TEXT,
-                $COLUMN_ADMIN_ADDRESS TEXT
+                $COLUMN_ADMIN_ADDRESS TEXT,
+                $COLUMN_ADMIN_TYPE TEXT
             )
         """.trimIndent()
         db?.execSQL(createAdminTableQuery)
@@ -102,7 +114,8 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
                 $COLUMN_USER_PHONENUMBER TEXT, 
                 $COLUMN_USER_EMAIL TEXT, 
                 $COLUMN_USER_PASSWORD TEXT,
-                $COLUMN_USER_ADDRESS TEXT
+                $COLUMN_USER_ADDRESS TEXT,
+                $COLUMN_USER_TYPE TEXT
             )
         """.trimIndent()
         db?.execSQL(createUserTableQuery)
@@ -133,9 +146,9 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
     // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 
-    // OPERAÇÕES DE ADMIN
-
-    // Método para fazer o registo do admin
+    /** OPERAÇÕES DE ADMIN
+     * Método para fazer o registo do admin
+     */
     fun insertAdmin(admin: Admin) {
         val db = writableDatabase
         val values = ContentValues().apply {
@@ -144,6 +157,7 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             put(COLUMN_ADMIN_EMAIL, admin.email)
             put(COLUMN_ADMIN_PASSWORD, admin.password)
             put(COLUMN_ADMIN_ADDRESS, admin.address)
+            put(COLUMN_ADMIN_TYPE, admin.type)
         }
         try {
             val newRowId = db.insertOrThrow(TABLE_ADMINS, null, values)
@@ -159,7 +173,10 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         }
     }
 
-    // Método para saber da existencia do admin
+
+    /**
+     * Método para saber da existencia do admin
+     */
     fun isAdminExist(email: String, password: String): Boolean {
         val db = readableDatabase
         val selection = "$COLUMN_ADMIN_EMAIL = ? AND $COLUMN_ADMIN_PASSWORD = ?"
@@ -175,7 +192,9 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         }
     }
 
-    // Método para obter a lista dos admins
+    /**
+     * Método para obter a lista dos admins
+     */
     fun getAllAdmins(): List<Admin> {
         val adminsList = mutableListOf<Admin>()
         val db = readableDatabase
@@ -186,12 +205,15 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             while (cursor.moveToNext()) {
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ADMIN_ID))
                 val fullname = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ADMIN_FULLNAME))
-                val phonenumber = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ADMIN_PHONENUMBER))
+                val phonenumber = cursor.getString(cursor.getColumnIndexOrThrow(
+                    COLUMN_ADMIN_PHONENUMBER
+                ))
                 val email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ADMIN_EMAIL))
                 val password = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ADMIN_PASSWORD))
                 val address = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ADMIN_ADDRESS))
+                val type = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ADMIN_TYPE))
 
-                val admin = Admin(id, fullname, phonenumber, email, password, address)
+                val admin = Admin(id, fullname, phonenumber, email, password, address, type)
                 adminsList.add(admin)
             }
         }
@@ -199,7 +221,10 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         return adminsList
     }
 
-    // Método para obter o ID do admin
+
+    /**
+     * Método para obter o ID do admin
+     */
     fun getAdminId(email: String, password: String): Int? {
         val db = this.readableDatabase
         val query = "SELECT id FROM admins WHERE email = ? AND password = ?"
@@ -213,7 +238,10 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         }
     }
 
-    // Funçao para update do admin
+
+    /**
+     * Funçao para update do admin
+     */
     fun updateAdmin(admin: Admin): Boolean {
         val db = writableDatabase
         val values = ContentValues().apply {
@@ -222,6 +250,7 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             put(COLUMN_ADMIN_EMAIL, admin.email)
             put(COLUMN_ADMIN_PASSWORD, admin.password)
             put(COLUMN_ADMIN_ADDRESS, admin.address)
+            put(COLUMN_ADMIN_TYPE, admin.type)
         }
 
         val selection = "$COLUMN_ADMIN_ID = ?"
@@ -244,7 +273,9 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
     }
 
 
-    // Function to get admin ID by email and password
+    /**
+     * Function to get admin ID by email and password
+     */
     fun getAdminIdByEmailAndPassword(email: String, password: String): Int? {
         val db = readableDatabase
         val selection = "$COLUMN_ADMIN_EMAIL = ? AND $COLUMN_ADMIN_PASSWORD = ?"
@@ -276,11 +307,14 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
     }
 
 
+
     // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-    // OPERAÇÕES DE USUARIOS
 
-    // Método para fazer resgisto do usuário
+    /**
+     * OPERAÇÕES DE USUARIOS
+     * Método para fazer resgisto do usuário
+     */
     fun insertUser(user: User) {
         val db = writableDatabase
         val values = ContentValues().apply {
@@ -289,6 +323,7 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             put(COLUMN_USER_EMAIL, user.email)
             put(COLUMN_USER_PASSWORD, user.password)
             put(COLUMN_USER_ADDRESS, user.address)
+            put(COLUMN_USER_TYPE, user.type)
         }
         try {
             val newRowId = db.insertOrThrow(TABLE_USERS, null, values)
@@ -304,7 +339,10 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         }
     }
 
-    // Método para obter a lista dos usuários
+
+    /**
+     * Método para obter a lista dos usuários
+     */
     fun getAllUsers(): List<User> {
         val usersList = mutableListOf<User>()
         val db = readableDatabase
@@ -315,12 +353,15 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             while (cursor.moveToNext()) {
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_ID))
                 val fullname = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_FULLNAME))
-                val phonenumber = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_PHONENUMBER))
+                val phonenumber = cursor.getString(cursor.getColumnIndexOrThrow(
+                    COLUMN_USER_PHONENUMBER
+                ))
                 val email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_EMAIL))
                 val password = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_PASSWORD))
                 val address = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ADDRESS))
+                val type = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_TYPE))
 
-                val user = User(id, fullname, phonenumber, email, password, address)
+                val user = User(id, fullname, phonenumber, email, password, address, type)
                 usersList.add(user)
             }
         }
@@ -328,7 +369,10 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         return usersList
     }
 
-    // Método para saber da existencia do usuário
+
+    /**
+     * Método para saber da existencia do usuário
+     */
     fun isUserExist(email: String, password: String): Boolean {
         val db = readableDatabase
         val selection = "$COLUMN_USER_EMAIL = ? AND $COLUMN_USER_PASSWORD = ?"
@@ -339,7 +383,10 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         return userExists
     }
 
-    // Método para obter o ID do usuário
+
+    /**
+     * Método para obter o ID do usuário
+     */
     fun getUserId(email: String, password: String): Int? {
         val db = this.readableDatabase
         val query = "SELECT id FROM users WHERE email = ? AND password = ?"
@@ -353,7 +400,10 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         }
     }
 
-    // Funçao para obter o update do user
+
+    /**
+     * Funçao para obter o update do user
+     */
     fun updateUser(user: User): Boolean {
         val db = writableDatabase
         val values = ContentValues().apply {
@@ -362,6 +412,7 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             put(COLUMN_USER_EMAIL, user.email)
             put(COLUMN_USER_PASSWORD, user.password)
             put(COLUMN_USER_ADDRESS, user.address)
+            put(COLUMN_USER_TYPE, user.type)
         }
 
         val selection = "$COLUMN_USER_ID = ?"
@@ -384,7 +435,10 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
     }
 
 
-    // Function to get user ID by email and password
+
+    /**
+     * Function to get user ID by email and password
+     */
     fun getUserIdByEmailAndPassword(email: String, password: String): Int? {
         val db = readableDatabase
         val selection = "$COLUMN_USER_EMAIL = ? AND $COLUMN_USER_PASSWORD = ?"
@@ -417,7 +471,10 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
     // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 
-    // Operações de Restaurantes
+
+    /**Operações de Restaurantes
+     * Método para fazer resgisto do Restaurante
+     */
     fun insertRestaurant(restaurant: Restaurant) {
         val db = writableDatabase
         val values = ContentValues().apply {
@@ -440,6 +497,10 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         }
     }
 
+
+    /**
+     * Método para obter lista restaurantes
+     */
     fun getAllRestaurants(): List<Restaurant> {
         val restaurantsList = mutableListOf<Restaurant>()
         val db = readableDatabase
@@ -449,10 +510,16 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         cursor.use {
             while (cursor.moveToNext()) {
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_ID))
-                val fullname = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_FULLNAME))
-                val phonenumber = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_PHONENUMBER))
+                val fullname = cursor.getString(cursor.getColumnIndexOrThrow(
+                    COLUMN_RESTAURANT_FULLNAME
+                ))
+                val phonenumber = cursor.getInt(cursor.getColumnIndexOrThrow(
+                    COLUMN_RESTAURANT_PHONENUMBER
+                ))
                 val email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_EMAIL))
-                val address = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_ADDRESS))
+                val address = cursor.getString(cursor.getColumnIndexOrThrow(
+                    COLUMN_RESTAURANT_ADDRESS
+                ))
 
                 val restaurant = Restaurant(id, fullname, phonenumber, email, address)
                 restaurantsList.add(restaurant)
@@ -466,8 +533,9 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
     // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 
-    // OPERAÇÕES DE MENU
-    // Function to insert menu into the database
+    /** OPERAÇÕES DE MENU
+     * Function to insert menu into the database
+     */
     fun insertMenu(menu: Menu) {
         val db = writableDatabase
         val values = ContentValues().apply {
@@ -488,7 +556,9 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         }
     }
 
-
+    /**
+     * Function to get list of menu
+     */
     fun getAllMenus(): List<Menu> {
         val menusList = mutableListOf<Menu>()
         val db = readableDatabase
@@ -499,7 +569,9 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             while (cursor.moveToNext()) {
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_MENU_ID))
                 val data = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MENU_DATA))
-                val description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MENU_DESCRIPTION))
+                val description = cursor.getString(cursor.getColumnIndexOrThrow(
+                    COLUMN_MENU_DESCRIPTION
+                ))
 
                 val menu = Menu(id, data, description)
                 menusList.add(menu)
@@ -513,12 +585,16 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
     // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 
-    // OPERAÇÕES DE COMMAND
+
+    /** OPERAÇÕES DE COMMAND
+     * Function to insert command in the database
+     */
     fun insertCommand(command: Command) {
         val db = writableDatabase
         val values = ContentValues().apply {
             put(COLUMN_COMMANDS_DATA, command.dataC)
             put(COLUMN_COMMANDS_DESCRIPTION, command.descriptionC)
+            put(COLUMN_COMMANDS_COMMANDER, command.commanderC)
         }
         try {
             val newRowId = db.insertOrThrow(TABLE_COMMANDS, null, values)
@@ -535,10 +611,10 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
     }
 
 
-
-        // Função para obter todos os comandos
-
-        fun getAllCommands(): List<Command> {
+    /**
+     * Função para obter todos os comandos
+     */
+    fun getAllCommands(): List<Command> {
             val commandList = mutableListOf<Command>()
             val db = readableDatabase
             val query = "SELECT * FROM $TABLE_COMMANDS"
@@ -550,8 +626,10 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
                     val data = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COMMANDS_DATA))
                     val description = cursor.getString(cursor.getColumnIndexOrThrow(
                         COLUMN_COMMANDS_DESCRIPTION))
+                    val commander = cursor.getString(cursor.getColumnIndexOrThrow(
+                        COLUMN_COMMANDS_COMMANDER))
 
-                    val command = Command(id, data, description)
+                    val command = Command(id, data, description, commander)
                     commandList.add(command)
                 }
             }
@@ -560,8 +638,10 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         }
 
 
-        // Função para obter um comando pelo ID
-        fun getCommandById(commandId: Int): Command? {
+    /**
+     * Função para obter um comando pelo ID
+     */
+    fun getCommandById(commandId: Int): Command? {
             val db = readableDatabase
             val selection = "$COLUMN_COMMANDS_ID = ?"
             val selectionArgs = arrayOf(commandId.toString())
@@ -570,17 +650,24 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             return if (cursor.moveToFirst()) {
                 val idC = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COMMANDS_ID))
                 val dataC = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COMMANDS_DATA))
-                val descriptionC = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COMMANDS_DESCRIPTION))
+                val descriptionC = cursor.getString(cursor.getColumnIndexOrThrow(
+                    COLUMN_COMMANDS_DESCRIPTION
+                ))
+                val commander = cursor.getString(cursor.getColumnIndexOrThrow(
+                    COLUMN_COMMANDS_COMMANDER))
                 cursor.close()
-                Command(idC, dataC, descriptionC)
+                Command(idC, dataC, descriptionC, commander)
             } else {
                 cursor.close()
                 null
             }
         }
 
-        // Função para atualizar um comando
-        fun updateCommand(command: Command): Boolean {
+
+    /**
+     * Função para atualizar um comando
+     */
+    fun updateCommand(command: Command): Boolean {
             val db = writableDatabase
             val values = ContentValues().apply {
                 put(COLUMN_COMMANDS_DATA, command.dataC)
@@ -606,8 +693,11 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             }
         }
 
-        // Função para deletar um comando pelo ID
-        fun deleteCommand(commandId: Int): Boolean {
+
+    /**
+     * Função para deletar um comando pelo ID
+     */
+    fun deleteCommand(commandId: Int): Boolean {
             val db = writableDatabase
             val selection = "$COLUMN_COMMANDS_ID = ?"
             val selectionArgs = arrayOf(commandId.toString())
@@ -629,7 +719,10 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         }
 
 
-    // Método para obter o nome do usuário com base no email e senha
+
+    /**
+     * Método para obter o nome do usuário com base no email e senha
+     */
     fun getUserName(email: String, password: String): String? {
         val db = this.readableDatabase
         val selection = "$COLUMN_USER_EMAIL = ? AND $COLUMN_USER_PASSWORD = ?"
@@ -651,6 +744,49 @@ class UserDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         }.also {
             cursor.close()
             db.close()
+        }
+    }
+
+
+    /**
+     * SEND THE DATA USER FOR API
+     */
+    private fun sendUserDataToAPI(user: User) {
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val url = URL(API_URL)
+                val conn = url.openConnection() as HttpURLConnection
+                conn.requestMethod = "POST"
+                conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8")
+                conn.doOutput = true
+
+                val jsonInputString = """
+                    {
+                        "fullname": "${user.fullname}",
+                        "phonenumber": "${user.phonenumber}",
+                        "email": "${user.email}",
+                        "password": "${user.password}",
+                        "address": "${user.address}",
+                        "type": "${user.type}"
+                    }
+                """.trimIndent()
+
+                val outputStream = conn.outputStream
+                val writer = OutputStreamWriter(outputStream)
+                writer.write(jsonInputString)
+                writer.flush()
+                writer.close()
+
+                val responseCode = conn.responseCode
+                if (responseCode == HttpURLConnection.HTTP_CREATED) {
+                    Log.d("DatabaseHelper", "Usuário criado com sucesso na API.")
+                } else {
+                    Log.e("DatabaseHelper", "Erro ao criar usuário na API. Código de resposta: $responseCode")
+                }
+                conn.disconnect()
+            } catch (e: Exception) {
+                Log.e("DatabaseHelper", "Erro ao enviar dados para API:", e)
+            }
         }
     }
 

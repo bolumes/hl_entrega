@@ -1,4 +1,4 @@
-package com.example.hl_entrega.classes
+package com.example.hl_entrega.Models
 
 data class Restaurant(
            val id: Int,

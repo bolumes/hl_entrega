@@ -1,4 +1,4 @@
-package com.example.hl_entrega
+package com.example.hl_entrega.UI
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

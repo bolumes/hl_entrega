@@ -1,4 +1,4 @@
-package com.example.hl_entrega
+package com.example.hl_entrega.UI
 
 import android.content.Intent
 import android.os.Bundle
@@ -19,47 +19,72 @@ class LoginActivity : AppCompatActivity() {
 
         db = UserDatabaseHelper(this)
 
+        // Navegar de volta para a atividade principal
         binding.navegarBack.setOnClickListener {
             navigateToMain()
         }
 
+        // Navegar para o registro de usuário
         binding.onSignUp.setOnClickListener {
             navigateToUserRegister()
         }
 
+
+        /**
+         * Lidar com o clique no botão de login
+         */
         binding.btnLogin.setOnClickListener {
             val email = binding.etusername.text.toString().trim()
             val password = binding.etpassword.text.toString().trim()
 
-            if (db.isUserExist(email, password) || (email == "User" && password == "Qwerty@321")) {
-                loginSuccessful("User", email, password)
-            } else if (db.isAdminExist(email, password) || (email == "Admin" && password == "P@sser123")) {
-                loginSuccessful("Admin", email, password)
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                when {
+                    db.isUserExist(email, password) || (email == "User" && password == "Qwerty@321") -> {
+                        loginSuccessful("User", email)
+                    }
+                    db.isAdminExist(email, password) || (email == "Admin" && password == "P@sser123") -> {
+                        loginSuccessful("Admin", email)
+                    }
+                    else -> {
+                        showLoginFailed()
+                    }
+                }
             } else {
-                showLoginFailed()
+                showLoginFailed("Por favor, insira o email e a senha.")
             }
         }
     }
 
-    private fun showLoginFailed() {
-        Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
+    /**
+     * When login is failed
+     */
+    private fun showLoginFailed(message: String = "Falha no login") {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun loginSuccessful(userType: String, email: String, password: String) {
-        Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
+
+    /**
+     * When login is sucessfull
+     */
+    private fun loginSuccessful(type: String, email: String) {
+        Toast.makeText(this, "Login bem-sucedido", Toast.LENGTH_SHORT).show()
 
         Handler().postDelayed({
-            when (userType) {
-                "Admin" -> navigateToMenu(MenuActivity::class.java, email, password)
-                "User" -> navigateToMenu(MenuUserActivity::class.java, email, password)
+            val targetActivity = when (type) {
+                "Admin" -> MenuActivity::class.java
+                "User" -> MenuUserActivity::class.java
+                else -> null
+            }
+            targetActivity?.let {
+                Toast.makeText(this, "Navigando para $it", Toast.LENGTH_SHORT).show()
+                navigateToMenu(it, email)
             }
         }, 1000)
     }
 
-    private fun navigateToMenu(activityClass: Class<*>, email: String, password: String) {
+    private fun navigateToMenu(activityClass: Class<*>, email: String) {
         val intent = Intent(this, activityClass).apply {
             putExtra("email", email)
-            putExtra("password", password)
         }
         startActivity(intent)
         finish()

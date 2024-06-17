@@ -1,4 +1,4 @@
-package com.example.hl_entrega
+package com.example.hl_entrega.UI
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hl_entrega.Models.User
+import com.example.hl_entrega.R
 import com.example.hl_entrega.databinding.ActivityAddUserBinding
 
 class AddUserActivity : AppCompatActivity() {
@@ -40,8 +41,9 @@ class AddUserActivity : AppCompatActivity() {
     }
 
 
-
-    //
+    /**
+     * Function to saved user
+     */
     private fun submitBtn(){
 
         binding.fullnameet.helperText = validFullname()
@@ -65,7 +67,8 @@ class AddUserActivity : AppCompatActivity() {
             val email = binding.emailet.editText?.text?.toString() ?: ""
             val password = binding.password.editText?.text?.toString() ?: ""
             val address = binding.address.editText?.text?.toString() ?: ""
-            val user = User(0, fullName, phoneNumber, email, password, address)
+            val type = binding.type.editText?.text?.toString() ?: ""
+            val user = User(0, fullName, phoneNumber, email, password, address, type)
 
             db.insertUser(user)
             finish()
@@ -79,7 +82,9 @@ class AddUserActivity : AppCompatActivity() {
 
     }
 
-    //RESET
+    /**
+     * function to reset filds
+     */
     private fun resetBtn() {
         var message = "Fullneme: " + binding.fullnameet.editText
         message += "Phonenumber: " + binding.phonenumberet.editText
@@ -105,7 +110,10 @@ class AddUserActivity : AppCompatActivity() {
 
 
     }
-    // INVALID
+
+    /**
+     * Function to see if the filds are invalid
+     */
     private fun invalidBtn() {
         var message = ""
         if (binding.fullnameet.helperText != null)

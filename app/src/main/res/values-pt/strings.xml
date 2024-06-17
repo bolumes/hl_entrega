@@ -1,3 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Nome do Aplicativo -->
+    <string name="app_name">HL ENTREGA</string>
+    <string name="welcome">Bem-vindo</string>
+    <string name="welcome_to">Bem-vindo ao</string>
+    <string name="welcome_to_help_services">Bem-vindo aos seus Serviços de Ajuda</string>
+
+    <!-- Autenticação de Usuário -->
+    <string name="full_name">Nome completo</string>
+    <string name="user_email">Email</string> <!-- Mantida esta instância -->
+    <string name="user_password">Senha</string> <!-- Mantida esta instância -->
+    <string name="confirm_password">Confirmar senha</string>
+    <string name="login_button">LOGIN</string> <!-- Renomeada para evitar conflito -->
+    <string name="sign_up">Registrar-se</string>
+    <string name="register">Registrar</string>
+    <string name="required">Obrigatório</string>
+    <string name="dont_have_account">Não tem uma conta?</string>
+    <string name="sign_up_here">Registre-se aqui</string>
+    <string name="back_to_login">Voltar ao Login</string>
+    <string name="logout_confirmation">Você realmente quer sair?</string>
+    <string name="login_successful">Login Bem-sucedido</string>
+
+    <!-- Seção de Admin -->
+    <string name="admin_full_name">Nome completo do administrador</string>
+    <string name="admin_phone_number">Número de telefone do administrador</string>
+    <string name="admin_email">Email do administrador</string>
+    <string name="admin_password">Senha do administrador</string>
+    <string name="hi_admin">Olá Administrador</string>
+    <string name="add_admin">Adicionar Administrador</string>
+    <string name="admins">Administradores</string>
+    <string name="list_admins">Listar Administradores</string>
+
+    <!-- Seção de Usuário -->
+    <string name="hi_user">Olá Usuário</string>
+    <string name="add_user">Adicionar Usuário</string>
+    <string name="users">Usuários</string>
+    <string name="list_users">Listar Usuários</string>
+
+    <!-- Seção de Restaurante -->
+    <string name="no_restaurants_available">Nenhum restaurante disponível</string>
+    <string name="add_restaurant">Adicionar Restaurante</string>
+    <string name="list_restaurants">Listar Restaurantes</string>
+
+    <!-- Seção de Menu -->
+    <string name="menu">Menu</string>
+    <string name="add_menu">Adicionar Menu</string>
+    <string name="description_menu">Descrição do menu</string>
+    <string name="list_menus">Listar Menus</string>
+
+    <!-- Navegação e Ações -->
+    <string name="go">IR</string>
+    <string name="back">Voltar</string>
+    <string name="send">Enviar</string>
+    <string name="submit">Submeter</string>
+    <string name="command">Comando</string>
+
+    <!-- Configurações e Perfil -->
+    <string name="profile">Perfil</string>
+    <string name="settings">Configurações</string>
+    <string name="data_system">Sistema de Dados</string>
+
+    <!-- GPS e Localização -->
+    <string name="gps">GPS</string>
+    <string name="gps_localisation">Localização GPS</string>
+    <string name="get_localisation">Obter Localização</string>
+    <string name="open_in_google_maps">Abrir no Google Maps</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+
+    <!-- Informações de Contato -->
+    <string name="phone_number">Número de telefone</string>
+    <string name="address">Endereço</string>
+    <string name="client_number">Número do Cliente</string>
+    <string name="client_address">Endereço do Cliente</string>
+    <string name="contact_us">Contate-nos: 920 403 997 / 962 618 278</string>
+    <string name="email_contact">Email: hl.entrega@tomar.pt</string>
+
+    <!-- Diversos -->
+    <string name="camera">Câmera</string>
+    <string name="make_the_choice">Faça a escolha</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+
+    <string name="admin_address">Endereço do Administrador</string>
+    <string name="welcome_message" />
+    <string name="signup">Registrar-se</string>
+    <string name="don_t_have_an_account">Não tem uma conta?</string>
+
+    <!-- Lista de Comandos e Menus -->
+    <string name="list_command">Lista de Comandos</string>
+    <string name="menu_list">Lista de Menus</string>
+    <string name="button_English" />
+
+    <!-- Dados de Restaurantes -->
+    <string name="rest_email">Email do restaurante</string>
+    <string name="rest_address">Endereço do restaurante</string>
+    <string name="rest_phonenumber">Número de telefone do restaurante</string>
+    <string name="restaurant_name">Nome do restaurante</string>
+
+    <!-- Dados de Usuários -->
+    <string name="user_fullname">Nome completo do usuário</string>
+    <string name="user_phonenumber">Número de telefone do usuário</string>
+    <string name="user_address">Endereço do usuário</string>
+    <string name="user_phone_number">Número de telefone do usuário</string>
+    <string name="user_full_name">Nome completo do usuário</string>
+    <string name="user">Usuário</string>
+
+    <!-- 'aboutUs' simplificado -->
+    <string name="aboutUs">
+        HL_ENTREGA é um aplicativo que facilita a interação entre usuários e restaurantes, permitindo pedidos de comida de forma eficiente.
+        \n\n
+        Homenagem aos criadores, Luis e Hamilton.
+        \n\n
+        Funcionalidades do Usuário:\n
+        - Menu do Dia: Visualização dos menus disponíveis.\n
+        - Perfil: Atualização de informações pessoais e detalhes do perfil.\n
+        - Câmera: Acesso à câmera do dispositivo.\n
+        - Pedidos: Realizar pedidos de comida diretamente.\n
+        - Sobre Nós: Informações sobre o aplicativo e como funciona.\n\n
+
+       Com esta estrutura clara, HL_ENTREGA se posiciona como uma solução eficaz para facilitar a interação entre usuários e restaurantes, proporcionando uma experiência de uso fluida e segura para todos os envolvidos.
+    </string>
 </resources>

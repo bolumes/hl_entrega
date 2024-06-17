@@ -7,4 +7,10 @@
     <color name="silver">#C0C0C0</color>
     <color name="blue">#0000FF</color>
     <color name="nav">#BAA86E</color>
+    <color name="lightgreen">#8FAF03 </color>
+    <color name="aqua">#2C3E50</color>
+    <color name="grey"> #AEB6BF</color>
+    <color name="color_pressed">#AEB6BF</color>
+    <color name="color_focused">#ABEBC6</color>
+
 </resources>

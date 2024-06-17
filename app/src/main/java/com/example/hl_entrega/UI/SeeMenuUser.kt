@@ -1,9 +1,9 @@
-package com.example.hl_entrega
+package com.example.hl_entrega.UI
 
-import android.R
+import android.content.Intent
 import android.os.Bundle
-import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hl_entrega.databinding.ActivitySeeMenuUserBinding
 
 class SeeMenuUser : AppCompatActivity() {
@@ -25,12 +25,31 @@ class SeeMenuUser : AppCompatActivity() {
 
         // Verificando se a lista de menus não está vazia
         if (menus.isNotEmpty()) {
-            // Pegando a descrição do último menu
-            val lastMenuDescription = menus.last().descriptionM
+            // Pegando o último menu
+            val lastMenu = menus.last()
 
-            // Configurando o ArrayAdapter para exibir apenas o último item no ListView
-            val adapter = ArrayAdapter(this, R.layout.simple_list_item_1, listOf(lastMenuDescription))
-            binding.listViewMenu.adapter = adapter
+            // Configurando o RecyclerView
+            val adapter = SeeMenuAdapter(lastMenu)
+            binding.recyclerViewMenu.layoutManager = LinearLayoutManager(this)
+            binding.recyclerViewMenu.adapter = adapter
         }
+
+        binding.btnDoComm.setOnClickListener {
+            navigateToDocommand()
+        }
+
+        binding.btnBack.setOnClickListener {
+            navigateToMenuUser()
+        }
+    }
+
+    private fun navigateToDocommand(){
+        val navigateCommand = Intent(this, CommandActivity::class.java)
+        startActivity(navigateCommand)
+    }
+
+    private fun navigateToMenuUser(){
+        val navigateMenuUser = Intent(this, MenuUserActivity::class.java)
+        startActivity(navigateMenuUser)
     }
 }

@@ -1,4 +1,4 @@
-package com.example.hl_entrega
+package com.example.hl_entrega.UI
 
 import android.content.Intent
 import android.os.Bundle
@@ -45,6 +45,10 @@ class RestaurantRegisterActivity : AppCompatActivity() {
         startActivity(navigateToMainIntent)
     }
 
+
+    /**
+     * Function to insert Restaurant in the database
+     */
     private fun submitBtn() {
         binding.fullnameet.helperText = validFullname()
         binding.phonenumberet.helperText = validPhonenumberet()
@@ -71,6 +75,9 @@ class RestaurantRegisterActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * function to reset filds
+     */
     private fun resetFields() {
         binding.fullnameet.editText?.setText(null)
         binding.phonenumberet.editText?.setText(null)
@@ -78,6 +85,10 @@ class RestaurantRegisterActivity : AppCompatActivity() {
         binding.address.editText?.setText(null)
     }
 
+
+    /**
+     * function to see if the filds are invalid
+     */
     private fun invalidBtn() {
         var message = ""
         if (binding.fullnameet.helperText != null) message += "Fullname: ${binding.fullnameet.helperText}\n"
@@ -92,6 +103,9 @@ class RestaurantRegisterActivity : AppCompatActivity() {
             .show()
     }
 
+    /**
+     * function to know if the fullname field meets the requirements
+     */
     private fun validFullname(): String? {
         val fullnameText = binding.fullnameet.editText?.text.toString().trim()
         return when {
@@ -101,6 +115,10 @@ class RestaurantRegisterActivity : AppCompatActivity() {
         }
     }
 
+
+    /**
+     * function to know if the phonenumber field meets the requirements
+     */
     private fun validPhonenumberet(): String? {
         val phonenumberText = binding.phonenumberet.editText?.text.toString()
         val numericPhonenumber = phonenumberText.replace(Regex("[^\\d]"), "")
@@ -111,6 +129,9 @@ class RestaurantRegisterActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * function to know if the email field meets the requirements
+     */
     private fun validEmail(): String? {
         val emailText = binding.emailet.editText?.text.toString().trim()
         return when {
@@ -120,6 +141,10 @@ class RestaurantRegisterActivity : AppCompatActivity() {
         }
     }
 
+
+    /**
+     * function to know if the address field is filled in or not
+     */
     private fun validAddress(): String? {
         val addressText = binding.address.editText?.text.toString().trim()
         return when {

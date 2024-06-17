@@ -2,78 +2,75 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/activityCommandUser"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
-
+    tools:context=".UI.MainActivity"
+    >
 
     <LinearLayout
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="667dp"
         android:gravity="center"
         android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        >
+
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:fontFamily="@font/carter_one"
-            android:text="Welcome"
-            android:textSize="25sp"
-            android:textColor="@color/blue"/>
-
-        <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="277dp"
-            android:layout_marginTop="15dp"
-            android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/btn_star_big_on" />
+            android:fontFamily="@font/allan"
+            android:text="W e l c o m e  t o"
+            android:textColor="@color/blue"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/audiowide"
+            android:fontFamily="@font/carter_one"
             android:text="HL_ENTREGA"
             android:textAlignment="center"
-            android:textSize="24sp"
-            android:textColor="@color/blue"/>
+            android:textColor="@color/blue"
+            android:textSize="24sp" />
 
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="match_parent"
+            android:layout_width="320dp"
             android:layout_height="235dp"
-            app:srcCompat="@drawable/fast" />
+            app:srcCompat="@drawable/localisation01" />
 
         <Button
             android:id="@+id/btnGo"
-            android:layout_width="110dp"
-            android:layout_height="70dp"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
-            android:textSize="20sp"
+            android:layout_marginTop="5dp"
             android:text="GO.."
-            android:layout_marginTop="5dp"/>
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/btnLogin"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="3dp"
+            android:drawableRight="@drawable/baseline_login_24"
             android:text="LOGIN"
             android:visibility="invisible" />
 
         <Button
             android:id="@+id/btnCreateAccount"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_marginBottom="50dp"
+            android:drawableRight="@drawable/baseline_person_add_24"
             android:text="SIGNUP"
             android:visibility="invisible" />
 
@@ -86,8 +83,9 @@
             android:text="Contact us for : 920 403 997 / 962 618 278"
             android:textAlignment="center"
             android:textColor="@color/blue"
-            android:textSize="14sp"
-            android:visibility="visible" />
+            android:textSize="11sp"
+            android:visibility="gone"
+            android:layout_marginBottom="-50dp"/>
 
         <TextView
             android:id="@+id/textViewEmail"
@@ -96,9 +94,10 @@
             android:fontFamily="@font/concert_one"
             android:text="Email : hl.entrega@tomar.pt"
             android:textAlignment="center"
+            android:textColor="@color/blue"
             android:textSize="17sp"
-            android:visibility="visible"
-            android:textColor="@color/blue"/>
+            android:visibility="gone"
+            android:layout_marginBottom="-70dp"/>
 
 
     </LinearLayout>

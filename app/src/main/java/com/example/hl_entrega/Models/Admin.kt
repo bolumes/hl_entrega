@@ -1,4 +1,4 @@
-package com.example.hl_entrega.classes
+package com.example.hl_entrega.Models
 
 data class Admin(
     val id: Int,
@@ -6,4 +6,5 @@ data class Admin(
     val phonenumber: String,
     val email: String,
     val password: String,
-    val address: String)
+    val address: String,
+    val type: String)

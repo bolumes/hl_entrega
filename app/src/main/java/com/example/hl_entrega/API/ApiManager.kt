@@ -1,78 +1,56 @@
-package com.example.hl_entrega
+// ApiManager.kt
+package com.example.hl_entrega.API
 
-import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
+import com.example.hl_entrega.Models.User
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 object ApiManager {
 
-    private const val BASE_URL = "https://hl_entrega.pt/"
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val apiService = retrofit.create(ApiService::class.java)
-
-    interface ApiService {
-
-        // Exemplo de método para obter dados do usuário
-        @GET("usuarios/{id}")
-        fun getUserData(@Path("id") userId: Int): Call<User>
-
-        // Métodos para operações CRUD com usuários
-        @POST("usuarios")
-        fun createUser(@Body user: User): Call<User>
-
-        @GET("usuarios")
-        fun getAllUsers(): Call<List<User>>
-
-        @PUT("usuarios/{id}")
-        fun updateUser(@Path("id") userId: Int, @Body user: User): Call<User>
-
-        @DELETE("usuarios/{id}")
-        fun deleteUser(@Path("id") userId: Int): Call<Void>
-
-        // Adicione métodos semelhantes para outras entidades e operações da API
+    fun getUserData(userId: Int, onResult: (Result<User>) -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = ApiService.getUserData(userId)
+            withContext(Dispatchers.Main) {
+                onResult(result)
+            }
+        }
     }
 
-    // Métodos para invocar as chamadas da API
-
-    fun getUserData(userId: Int, callback: retrofit2.Callback<User>) {
-        val call = apiService.getUserData(userId)
-        call.enqueue(callback)
+    fun createUser(user: User, onResult: (Result<User>) -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = ApiService.createUser(user)
+            withContext(Dispatchers.Main) {
+                onResult(result)
+            }
+        }
     }
 
-    fun createUser(user: User, callback: retrofit2.Callback<User>) {
-        val call = apiService.createUser(user)
-        call.enqueue(callback)
+    fun getAllUsers(onResult: (Result<List<User>>) -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = ApiService.getAllUsers()
+            withContext(Dispatchers.Main) {
+                onResult(result)
+            }
+        }
     }
 
-    fun getAllUsers(callback: retrofit2.Callback<List<User>>) {
-        val call = apiService.getAllUsers()
-        call.enqueue(callback)
+    fun updateUser(userId: Int, user: User, onResult: (Result<User>) -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = ApiService.updateUser(userId, user)
+            withContext(Dispatchers.Main) {
+                onResult(result)
+            }
+        }
     }
 
-    fun updateUser(userId: Int, user: User, callback: retrofit2.Callback<User>) {
-        val call = apiService.updateUser(userId, user)
-        call.enqueue(callback)
+    fun deleteUser(userId: Int, onResult: (Result<Boolean>) -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = ApiService.deleteUser(userId)
+            withContext(Dispatchers.Main) {
+                onResult(result)
+            }
+        }
     }
-
-    fun deleteUser(userId: Int, callback: retrofit2.Callback<Void>) {
-        val call = apiService.deleteUser(userId)
-        call.enqueue(callback)
-    }
-
-    // Adicione métodos semelhantes para outras operações e entidades da API
-
-
-
-
 }

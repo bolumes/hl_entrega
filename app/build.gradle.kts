@@ -79,6 +79,21 @@ dependencies {
     implementation ("androidx.databinding:viewbinding:7.0.3")
     implementation ("androidx.appcompat:appcompat:1.3.1")
 
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Ktor client
+    implementation("io.ktor:ktor-client-core:2.0.3")
+    implementation("io.ktor:ktor-client-cio:2.0.3") // Cliente Http baseado em CIO
+    implementation("io.ktor:ktor-client-android:2.0.3") // Cliente Http para Android
+    implementation("io.ktor:ktor-client-serialization:2.0.3") // Serialização JSON
+    implementation("io.ktor:ktor-client-logging:2.0.3") // Logging HTTP
+
+    implementation("io.ktor:ktor-client-content-negotiation:2.0.0") // Plugin Content Negotiation
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.0.0") // Serialização com Kotlinx Json
+    
+
+
 
 
 }

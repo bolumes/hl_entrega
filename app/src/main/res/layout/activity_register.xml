@@ -5,18 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".RegisterActivity"
-    android:background="@drawable/login_background">
+    tools:context=".UI.UserRegisterActivity"
+    android:background="@color/nav">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20sp"
+        android:fontFamily="@font/aclonica"
+        android:text="Add User"
+        android:textColor="@color/white"
+        android:textSize="18dp" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/fullnameet"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
         android:layout_marginHorizontal="20sp"
         app:helperText="Required"
-        app:helperTextTextColor="@color/yellow"
+        app:helperTextTextColor="@color/red"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -26,7 +36,8 @@
             android:layout_height="wrap_content"
             android:lines="1"
             android:inputType="text"
-            android:hint="@string/full_name" />
+            android:hint="@string/user_fullname"
+            android:drawableRight="@drawable/baseline_person"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -35,10 +46,10 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
         android:layout_marginHorizontal="20sp"
         app:helperText="Required"
-        app:helperTextTextColor="@color/yellow"
+        app:helperTextTextColor="@color/red"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -51,7 +62,8 @@
             android:layout_height="wrap_content"
             android:lines="1"
             android:inputType="number"
-            android:hint="Phone number" />
+            android:hint="@string/user_phonenumber"
+            android:drawableRight="@drawable/baseline_phone_android"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -60,10 +72,10 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
         android:layout_marginHorizontal="20sp"
         app:helperText="Required"
-        app:helperTextTextColor="@color/yellow"
+        app:helperTextTextColor="@color/red"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -73,7 +85,8 @@
             android:layout_height="wrap_content"
             android:lines="1"
             android:inputType="textEmailAddress"
-            android:hint="@string/email" />
+            android:hint="User email"
+            android:drawableRight="@drawable/baseline_alternate_email"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -82,10 +95,10 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
         android:layout_marginHorizontal="20sp"
         app:helperText="Required"
-        app:helperTextTextColor="@color/yellow"
+        app:helperTextTextColor="@color/red"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -99,38 +112,124 @@
             android:layout_height="wrap_content"
             android:lines="1"
             android:inputType="textPassword"
-            android:hint="@string/password"
+            android:hint="User password"
             android:maxLength="15"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/address"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+        android:layout_marginHorizontal="20sp"
+        app:helperText="Required"
+        app:helperTextTextColor="@color/red"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:counterTextColor="@color/white"
+        app:passwordToggleEnabled="true"
+        app:endIconDrawable="@drawable/baseline_add_location_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:hint="@string/user_address"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/type"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+        android:layout_marginHorizontal="20sp"
+        app:helperText="Required"
+        app:helperTextTextColor="@color/red"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:counterTextColor="@color/white"
+        app:passwordToggleEnabled="true"
+        app:endIconDrawable="@drawable/baseline_add_location_24"
+        android:visibility="gone">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:hint="type"
+            android:text="User"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <LinearLayout
+        android:layout_width="350dp"
         android:layout_height="60dp"
         android:orientation="horizontal"
         android:layout_gravity="center"
+        android:layout_marginTop="-5dp"
         >
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/backlogin"
-                android:layout_width="160dp"
+                android:id="@+id/backMain"
+                android:layout_width="130dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
                 android:layout_marginTop="10dp"
-                android:text="Login"
+                android:text="BACK"
                 android:textColor="@color/white"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                />
 
             <com.google.android.material.button.MaterialButton
                     android:id="@+id/submitButton"
-                    android:layout_width="160dp"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="3dp"
                     android:layout_marginTop="10dp"
                     android:text="SUBMIT"
                     android:textColor="@color/white"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
 
         </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="-8dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Already have an account?  "
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:textSize="15dp"
+            />
+        <TextView
+            android:id="@+id/onLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Login"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/blue"
+            android:textSize="16dp" />
+
+    </LinearLayout>
 
 </LinearLayout>

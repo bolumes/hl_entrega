@@ -1,4 +1,4 @@
-package com.example.hl_entrega
+package com.example.hl_entrega.UI
 
 import android.Manifest
 import android.content.ContentValues
@@ -126,7 +126,9 @@ class UsergetCamera : AppCompatActivity() {
             }
 
         }, ContextCompat.getMainExecutor(this))
+
     }
+
 
     /**
      * Capture a photo and save it to the media store
@@ -184,4 +186,6 @@ class UsergetCamera : AppCompatActivity() {
             }
         }.toTypedArray()
     }
+
+
 }
